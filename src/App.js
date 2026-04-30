@@ -35,7 +35,16 @@ function loadHistory() {
 function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
 function saveSettings(s) { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); }
 
-const EMPTY_FORM = { instrument: "", entry: "", target: "", stop: "", rationale: "", result: "" };
+const LOT_SIZES = { SENSEX: 20, NIFTY: 65 };
+
+function getLotSize(instrument) {
+  const upper = instrument.toUpperCase();
+  if (upper.includes("SENSEX")) return LOT_SIZES.SENSEX;
+  if (upper.includes("NIFTY")) return LOT_SIZES.NIFTY;
+  return null;
+}
+
+const EMPTY_FORM = { instrument: "", entry: "", target: "", stop: "", rationale: "", result: "", lots: "" };
 
 const C = {
   bg: "#f5f4f0",
@@ -215,10 +224,23 @@ export default function App() {
             Pre-trade checklist — fill all fields to proceed
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            <div>
-              <div style={{ fontSize: 10, color: C.muted, letterSpacing: 1, textTransform: "uppercase", marginBottom: 4 }}>Instrument</div>
-              <input className="field" placeholder="e.g. NIFTY 24500 CE" value={form.instrument} onChange={e => setForm(f => ({ ...f, instrument: e.target.value }))} />
+            <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 10, alignItems: "end" }}>
+              <div>
+                <div style={{ fontSize: 10, color: C.muted, letterSpacing: 1, textTransform: "uppercase", marginBottom: 4 }}>Instrument</div>
+                <input className="field" placeholder="e.g. NIFTY 24500 CE" value={form.instrument} onChange={e => setForm(f => ({ ...f, instrument: e.target.value }))} />
+              </div>
+              <div style={{ minWidth: 90 }}>
+                <div style={{ fontSize: 10, color: C.muted, letterSpacing: 1, textTransform: "uppercase", marginBottom: 4 }}>
+                  Lots{getLotSize(form.instrument) ? <span style={{ color: C.gold, marginLeft: 4 }}>= {getLotSize(form.instrument)} qty</span> : ""}
+                </div>
+                <input className="field" placeholder="# lots" type="number" min="1" value={form.lots} onChange={e => setForm(f => ({ ...f, lots: e.target.value }))} />
+              </div>
             </div>
+            {form.lots && getLotSize(form.instrument) && (
+              <div style={{ fontSize: 11, color: C.gold, background: C.goldLight, borderRadius: 5, padding: "6px 12px", fontWeight: 700 }}>
+                {form.lots} lot{form.lots > 1 ? "s" : ""} × {getLotSize(form.instrument)} = <span style={{ fontSize: 13 }}>{Number(form.lots) * getLotSize(form.instrument)} qty</span>
+              </div>
+            )}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}>
               {[["entry", "Entry", "₹ price"], ["target", "Target", "₹ target"], ["stop", "Stop loss", "₹ stop"]].map(([key, label, ph]) => (
                 <div key={key}>
@@ -356,6 +378,12 @@ function TradeCard({ t, i }) {
           </div>
         ))}
       </div>
+      {t.lots && (
+        <div style={{ fontSize: 11, color: C.gold, marginBottom: 8 }}>
+          {t.lots} lot{t.lots > 1 ? "s" : ""}
+          {getLotSize(t.instrument) && <span style={{ color: C.faint }}> × {getLotSize(t.instrument)} = {Number(t.lots) * getLotSize(t.instrument)} qty</span>}
+        </div>
+      )}
       <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.6, borderTop: `1px solid ${C.border2}`, paddingTop: 8 }}>{t.rationale}</div>
       {t.result && (
         <div style={{ marginTop: 6, fontSize: 12, fontWeight: 700, color: t.result.startsWith("+") ? C.green : t.result.startsWith("-") ? C.red : C.muted }}>
