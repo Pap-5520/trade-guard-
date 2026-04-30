@@ -2,7 +2,7 @@
   "name": "trade-guard",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Pap-5520.github.io/trade-guard",
+  "homepage": "https://Pap-5520.github.io/trade-guard-",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
