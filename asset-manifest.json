@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/trade-guard-/static/css/main.e6c13ad2.css",
-    "main.js": "/trade-guard-/static/js/main.e0fe891d.js",
+    "main.js": "/trade-guard-/static/js/main.9a839c11.js",
     "static/js/453.692b546f.chunk.js": "/trade-guard-/static/js/453.692b546f.chunk.js",
     "index.html": "/trade-guard-/index.html",
     "main.e6c13ad2.css.map": "/trade-guard-/static/css/main.e6c13ad2.css.map",
-    "main.e0fe891d.js.map": "/trade-guard-/static/js/main.e0fe891d.js.map",
+    "main.9a839c11.js.map": "/trade-guard-/static/js/main.9a839c11.js.map",
     "453.692b546f.chunk.js.map": "/trade-guard-/static/js/453.692b546f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.e0fe891d.js"
+    "static/js/main.9a839c11.js"
   ]
 }
